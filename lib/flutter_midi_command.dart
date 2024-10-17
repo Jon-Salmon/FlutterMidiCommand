@@ -80,6 +80,10 @@ class MidiCommand {
   /// Returns the state of the bluetooth central
   BluetoothState get bluetoothState => _bluetoothState;
 
+  Future<void> setup() async {
+    await _platform.setup();
+  }
+
   /// Starts the bluetooth central
   Future<void> startBluetoothCentral() async {
     if (_bluetoothCentralIsStarted) {

@@ -208,6 +208,9 @@ public class SwiftFlutterMidiCommandPlugin: NSObject, CBCentralManagerDelegate, 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         //        print("call method \(call.method)")
         switch call.method {
+        case "setup":
+            result(nil);
+            break
         case "startBluetoothCentral":
             startBluetoothCentralWhenNeeded();
             result(nil);

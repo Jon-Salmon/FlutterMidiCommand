@@ -70,7 +70,8 @@ class FlutterMidiCommandPlugin : FlutterPlugin, ActivityAware, MethodCallHandler
     // TODO: your plugin is now attached to an Activity
     activity = p0.activity
     p0.addRequestPermissionsResultListener(this)
-    setup()
+    val channel = MethodChannel(messenger, "plugins.invisiblewrench.com/flutter_midi_command")
+    channel.setMethodCallHandler(this)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -113,7 +114,8 @@ class FlutterMidiCommandPlugin : FlutterPlugin, ActivityAware, MethodCallHandler
       instance.messenger = registrar.messenger()
       instance.context = registrar.activeContext()
       instance.activity = registrar.activity()
-      instance.setup()
+      val channel = MethodChannel(messenger, "plugins.invisiblewrench.com/flutter_midi_command")
+      channel.setMethodCallHandler(instance)
     }
 
     lateinit var rxStreamHandler:FMCStreamHandler
@@ -123,9 +125,7 @@ class FlutterMidiCommandPlugin : FlutterPlugin, ActivityAware, MethodCallHandler
 
   fun setup() {
     print("setup")
-    val channel = MethodChannel(messenger, "plugins.invisiblewrench.com/flutter_midi_command")
-    channel.setMethodCallHandler(this)
-
+    
     handler = Handler(context.mainLooper)
     midiManager = context.getSystemService(Context.MIDI_SERVICE) as MidiManager
     midiManager.registerDeviceCallback(deviceConnectionCallback, handler)
@@ -148,6 +148,10 @@ class FlutterMidiCommandPlugin : FlutterPlugin, ActivityAware, MethodCallHandler
 //    Log.d("FlutterMIDICommand","call method ${call.method}")
 
     when (call.method) {
+      "setup" -> {
+        setup()
+        result.success(null)
+      }
       "sendData" -> {
         var args : Map<String,Any>? = call.arguments()
         sendData(args?.get("data") as ByteArray, args["timestamp"] as? Long, args["deviceId"]?.toString())
