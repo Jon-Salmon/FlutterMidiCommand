@@ -114,7 +114,7 @@ class FlutterMidiCommandPlugin : FlutterPlugin, ActivityAware, MethodCallHandler
       instance.messenger = registrar.messenger()
       instance.context = registrar.activeContext()
       instance.activity = registrar.activity()
-      val channel = MethodChannel(messenger, "plugins.invisiblewrench.com/flutter_midi_command")
+      val channel = MethodChannel(instance.messenger, "plugins.invisiblewrench.com/flutter_midi_command")
       channel.setMethodCallHandler(instance)
     }
 
